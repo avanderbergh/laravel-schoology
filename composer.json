@@ -1,0 +1,26 @@
+{
+	"name": "avanderbergh/laravel-schoology",
+	"description": "A Laravel Package to allow for the development of apps on top of the Schoology platform. Built by modifying and combining these packages: aacotroneo/laravel-saml2 and schoology/schoology_php_sdk.",
+	"keywords": ["schoology", "saml"],
+	"homepage": "http://github.com/avanderbergh/laravel-schoology",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "avanderbergh",
+			"email": "avanderbergh@gmail.com" 
+	],
+	"require": {
+      "php": ">=5.4.0",
+      "illuminate/support": "5.0.*",
+      "onelogin/php-saml": "2.3"
+	},
+	"require-dev": {
+      "mockery/mockery": "0.9.*"
+	},
+	"autoload": {
+		"psr-0": {
+			"Avanderbergh\\Schoology\\": "src/"
+		}
+	},
+	"minimum-stability": "stable"
+}
