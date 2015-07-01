@@ -43,3 +43,4 @@ CONSUMER_KEY='Your Schoology Oauth Consumer Key'
 CONSUMER_SECRET='You Schoology Oauth Consumer Secret'
 ```
 
+Please refer to <a href="https://developers.schoology.com/api-documentation/rest-api-v1">this page</a> for more information on using the Schoology API.
