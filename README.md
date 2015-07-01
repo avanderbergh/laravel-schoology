@@ -8,7 +8,7 @@ To install this package please add the following to your __composer.json__ in th
 "avanderbergh/schoology" : "*"
 ```
 ... and run `composer update`. When the installation finishes, add add the following to `app/config/app.php`.
-```json
+```
 'providers' => [
     ...
     'Avanderbergh\Schoology',
@@ -24,6 +24,7 @@ Now run a `php artisan migrate` to create the __oauth_store__ table. This table 
 
 ## CSRF Token Verification Middleware
 For this package to work, you will need to disable Laravel's CSRF varification middleware. To do this, open the file `app/Http/Kernel.php`, find the array ```protected $middleware``` and delete the line ```'App\Http\Middleware\VerifyCsrfToken',```.
+The file should now look like this:
 ```php
 protected $middleware = [
 		'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
@@ -31,7 +32,6 @@ protected $middleware = [
 		'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
 		'Illuminate\Session\Middleware\StartSession',
 		'Illuminate\View\Middleware\ShareErrorsFromSession',
-		~~'App\Http\Middleware\VerifyCsrfToken',~~
 ];
 ```
 # Usage
