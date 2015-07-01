@@ -21,6 +21,7 @@ class Saml2ServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        include __DIR__ . '/../../routes.php';
         /*
          * publish the saml_settings file to the config_path
          */
