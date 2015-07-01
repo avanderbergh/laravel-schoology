@@ -39,20 +39,13 @@ class Saml2ServiceProvider extends ServiceProvider
     public function register()
     {
 
-        $this->app->singleton('Avanderbegh\Schoology\Saml2Auth', function ($app) {
-
+        $this->app->singleton('Avanderbergh\Schoology\Saml2Auth', function ($app) {
             $config = config('saml2_settings');
-
             $config['sp']['entityId'] = URL::route('saml_metadata');
-
             $config['sp']['assertionConsumerService']['url'] = URL::route('saml_acs');
-
             $config['sp']['singleLogoutService']['url'] = URL::route('saml_sls');
-
             $auth = new OneLogin_Saml2_Auth($config);
-
-            return new Saml2Auth($auth);
-
+            return new \Avanderbergh\Schoology\Saml2Auth($auth);
         });
 
     }
