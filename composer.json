@@ -5,10 +5,11 @@
 	"homepage": "http://github.com/avanderbergh/laravel-schoology",
 	"license": "MIT",
 	"authors": [
-		{
-			"name": "avanderbergh",
-			"email": "avanderbergh@gmail.com" 
-	],
+      {
+        "name": "avanderbergh",
+        "email": "avanderbergh@gmail.com"
+      }
+    ],
 	"require": {
       "php": ">=5.4.0",
       "illuminate/support": "5.0.*",
