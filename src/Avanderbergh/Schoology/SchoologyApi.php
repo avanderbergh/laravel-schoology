@@ -112,7 +112,7 @@ class SchoologyApi
      */
     public function authorize($uid, $app_session_timestamp){
     // Get stored access tokens for the given user ID
-      $oauthstore=OauthStore::where('id',$uid)->where('token_is_access',1)->first();
+      $oauthstore=OAuthStore::where('id',$uid)->where('token_is_access',1)->first();
 
       if($oauthstore){
           $access_tokens=$oauthstore->toArray();
@@ -170,7 +170,7 @@ class SchoologyApi
      * @param $uid
      */
   public function deauthorize($uid){
-      OauthStore::where('id',$uid)->delete();
+      OAuthStore::where('id',$uid)->delete();
   }
 
     /**
@@ -365,7 +365,7 @@ class SchoologyApi
       $result = array();
       parse_str($api_result->result, $result);
       // Store the request token in our DB
-        $storage = OauthStore::firstOrNew(['id'=>$uid]);
+        $storage = OAuthStore::firstOrNew(['id'=>$uid]);
         $storage->id=$uid;
         $storage->token_key=$result['oauth_token'];
         $storage->token_secret=$result['oauth_token_secret'];
@@ -388,7 +388,7 @@ class SchoologyApi
         if(!$uid){
             throw New Exception('No UID in Session Schoology');
         }
-        $request_tokens = OauthStore::where('id',$uid)->where('token_is_access',0)->first()->toArray();
+        $request_tokens = OAuthStore::where('id',$uid)->where('token_is_access',0)->first()->toArray();
 
       // If the token doesn't match what we have in the DB, someone's tampering with requests
       if($request_tokens['token_key'] !== $_GET['oauth_token']){
@@ -405,7 +405,7 @@ class SchoologyApi
       parse_str($api_result->result, $result);
     
       // Update our DB to replace the request tokens with access tokens
-        OauthStore::find($uid)->update(['token_key'=>$result['oauth_token'], 'token_secret'=>$result['oauth_token_secret'],'token_is_access'=>1]);
+        OAuthStore::find($uid)->update(['token_key'=>$result['oauth_token'], 'token_secret'=>$result['oauth_token_secret'],'token_is_access'=>1]);
       // Update our $oauth credentials and proceed normally
       $this->_token_key = $result['oauth_token'];
       $this->_token_secret = $result['oauth_token_secret'];

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOauthStoresTable extends Migration {
+class CreateOauthStoreTable extends Migration {
 
 	/**
 	 * Run the migrations.
