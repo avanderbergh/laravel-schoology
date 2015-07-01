@@ -1,7 +1,6 @@
 <?php
 namespace Avanderbergh\Schoology;
 
-use Avanderbergh\Schoology\OAuthStore;
 use Mockery\CountValidator\Exception;
 use Redirect;
 
@@ -476,40 +475,3 @@ class SchoologyApi
   }
 
 }
-
-/*****************************
- * Interface class for oauth *
- * token storage             *
- *****************************/
-interface SchoologyApi_OauthStorage
-{
-  /**
-   * Given a user ID, return an array containing the 
-   * following parameters, or FALSE if none found
-   *   'uid' - the ID of the current user (passed as parameter)
-   *   'token_key' - the OAuth access key
-   *   'token_secret' - the OAuth access secret
-   */
-  public function getAccessTokens($uid);
-
-  /**
-   * Store the request tokens for a given user ID
-   */
-  public function saveRequestTokens($uid, $token_key, $token_secret);
-  
-  /**
-  * Retrieve request tokens for a given user ID
-  */
-  public function getRequestTokens($uid);
-
-  /**
-   * Replace existing request_tokens for access_tokens
-   */
-  public function requestToAccessTokens($uid, $token_key, $token_secret);
-  
-  /**
-   * Revoke any existing tokens (e.g. if they're no longer valid)
-   */
-  public function revokeAccessTokens($uid);
-}
-
