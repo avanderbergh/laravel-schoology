@@ -5,7 +5,7 @@ This package combines modified files from <a href="https://github.com/aacotroneo
 # Installation with Composer
 To install this package please add the following to your __composer.json__ in the Laravel root directory...
 ```json
-"avanderbergh/schoology" : "*"
+"avanderbergh/laravel-schoology" : "*"
 ```
 ... and run `composer update`. When the installation finishes, add add the following to `app/config/app.php`.
 ```
