@@ -10,4 +10,6 @@ class OAuthStore extends Model {
         'token_secret',
         'token_is_access'
     ];
+
+    protected $table = 'oauth_store';
 }

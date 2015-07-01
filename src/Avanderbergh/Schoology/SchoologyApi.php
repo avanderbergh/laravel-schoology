@@ -10,18 +10,48 @@ use Redirect;
  */
 class SchoologyApi
 {
-  private $_consumer_key;
-  private $_consumer_secret;
-  private $_token_key = '';
-  private $_token_secret = '';
-  private $_is_two_legged = '';
+    /**
+     * @var
+     */
+    private $_consumer_key;
+    /**
+     * @var
+     */
+    private $_consumer_secret;
+    /**
+     * @var string
+     */
+    private $_token_key = '';
+    /**
+     * @var string
+     */
+    private $_token_secret = '';
+    /**
+     * @var bool|string
+     */
+    private $_is_two_legged = '';
 
-  private $_api_supported_methods = array('POST','GET','PUT','DELETE','OPTIONS');
-  private $_api_base = '';
-  private $_api_site_base = '';
+    /**
+     * @var array
+     */
+    private $_api_supported_methods = array('POST','GET','PUT','DELETE','OPTIONS');
+    /**
+     * @var string
+     */
+    private $_api_base = '';
+    /**
+     * @var string
+     */
+    private $_api_site_base = '';
 
-  private $curl_resource;
-  private $curl_opts = array(
+    /**
+     * @var resource
+     */
+    private $curl_resource;
+    /**
+     * @var array
+     */
+    private $curl_opts = array(
     CURLOPT_USERAGENT => 'schoology-php-1.0',
     CURLOPT_CONNECTTIMEOUT => 20,
     CURLOPT_RETURNTRANSFER => true,
@@ -35,8 +65,15 @@ class SchoologyApi
   );
 
 
-
-  public function __construct( $consumer_key, $consumer_secret, $site_base = '', $token_key = '', $token_secret = '', $two_legged = FALSE)
+    /**
+     * @param $consumer_key
+     * @param $consumer_secret
+     * @param string $site_base
+     * @param string $token_key
+     * @param string $token_secret
+     * @param bool $two_legged
+     */
+    public function __construct( $consumer_key, $consumer_secret, $site_base = '', $token_key = '', $token_secret = '', $two_legged = FALSE)
   {
     $this->_api_base = defined('SCHOOLOGY_API_BASE') ? SCHOOLOGY_API_BASE : 'http://api.schoology.com/v1';
     if($site_base) {
@@ -58,20 +95,22 @@ class SchoologyApi
     $this->curl_resource = curl_init();
     $this->_is_two_legged = $two_legged;
   }
-  
-  public function __destruct(){
+
+    /**
+     *
+     */
+    public function __destruct(){
     curl_close($this->curl_resource);
   }
 
+
     /**
-     * Initialize and set the proper access tokens for the
-     * user ID from the given storage engine
      * @param $uid
      * @param $app_session_timestamp
-     * @return string
-     * @throws \ExpiredSGYWebSession
+     * @return bool|string
+     * @throws Exception
      */
-  public function authorize($uid, $app_session_timestamp){
+    public function authorize($uid, $app_session_timestamp){
     // Get stored access tokens for the given user ID
       $oauthstore=OAuthStore::where('id',$uid)->where('token_is_access',1)->first();
 
@@ -159,15 +198,17 @@ class SchoologyApi
     return $result->result;
   }
 
+
     /**
-     * Make a schoology API Call
+     * Make a Schoology API call
      * @param $url
      * @param string $method
      * @param array $body
      * @param array $extra_headers
      * @return object
+     * @throws Exception
      */
-  public function api( $url , $method = 'GET' , $body = array() , $extra_headers = array() )
+    public function api( $url , $method = 'GET' , $body = array() , $extra_headers = array() )
   {
     if(!in_array($method,$this->_api_supported_methods))
       throw new Exception('API method '.$method.' is not supported. Must be '.implode(',',$this->_api_supported_methods));
@@ -186,19 +227,18 @@ class SchoologyApi
 
     return $response;
   }
-  
-  
-  /**
-  * Upload a file to Schoology servers
-  * The file upload is a 2 step process.
-  * 1) Aquire permission and a unique upload endpoint
-  * 2) PUT the contents of the file to the endpoint from step 2
-  *
-  * @param string $filepath file path
-  * @return
-  * Upload id
-  */
-  public function apiFileUpload($filepath)
+
+
+    /**
+     * Upload a file to Schoology servers
+     * The file upload is a 2 step process.
+     * 1) Aquire permission and a unique upload endpoint
+     * 2) PUT the contents of the file to the endpoint from step 2
+     * @param $filepath
+     * @return mixed
+     * @throws Exception
+     */
+    public function apiFileUpload($filepath)
   {
     // step 1: set empty placeholder and get unique upload enpoint
     $filename = basename($filepath);
@@ -247,8 +287,16 @@ class SchoologyApi
     
     return $fid;
   }
-  
-  private function _curlRequest($url = '', $method = '' , $body = array() , $extra_headers = array() )
+
+    /**
+     * @param string $url
+     * @param string $method
+     * @param array $body
+     * @param array $extra_headers
+     * @return object
+     * @throws Exception
+     */
+    private function _curlRequest($url = '', $method = '' , $body = array() , $extra_headers = array() )
   {
     $curl_resource = $this->curl_resource;
   
@@ -301,8 +349,13 @@ class SchoologyApi
   
     return $this->_getApiResponse($curl_resource, $result);
   }
-  
-  private function _authenticateOauth($uid){
+
+    /**
+     * @param $uid
+     * @return bool|string
+     * @throws Exception
+     */
+    private function _authenticateOauth($uid){
     // Get and authorize a request token
     if(!isset($_GET['oauth_token'])){
       // Get a request token
@@ -360,7 +413,13 @@ class SchoologyApi
     }
   }
 
-  private function _makeOauthHeaders( $url = '' , $method = '' , $body = '' )
+    /**
+     * @param string $url
+     * @param string $method
+     * @param string $body
+     * @return string
+     */
+    private function _makeOauthHeaders( $url = '' , $method = '' , $body = '' )
   {
     $timestamp = time();
 
@@ -388,7 +447,13 @@ class SchoologyApi
    
   }
 
-  private function _makeOauthSig( $url = '' , $method = '' , &$oauth_config = '' )
+    /**
+     * @param string $url
+     * @param string $method
+     * @param string $oauth_config
+     * @return mixed|string
+     */
+    private function _makeOauthSig( $url = '' , $method = '' , &$oauth_config = '' )
   {
     $base_string = $this->_makeBaseString( $url , $method , $oauth_config );
     $oauth_str = $this->_urlencode($this->_consumer_secret).'&'.$this->_urlencode($this->_token_secret);
@@ -401,12 +466,22 @@ class SchoologyApi
   }
 
    // according to RFC-3986
-  private function _urlencode ( $s )
+    /**
+     * @param $s
+     * @return mixed
+     */
+    private function _urlencode ( $s )
   {
     return str_replace('%7E', '~', rawurlencode($s));
   }
 
-  private function _makeBaseString( $url = '' , $method = '' , $oauth_config )
+    /**
+     * @param string $url
+     * @param string $method
+     * @param $oauth_config
+     * @return string
+     */
+    private function _makeBaseString( $url = '' , $method = '' , $oauth_config )
   {
     // $url shouldn't include parameters
     if(strpos($url, '?') !== FALSE){
@@ -438,7 +513,11 @@ class SchoologyApi
   }
   
   // From http://www.php.net/manual/en/function.http-parse-headers.php#77241
-  private function _parseHttpHeaders($header){
+    /**
+     * @param $header
+     * @return array
+     */
+    private function _parseHttpHeaders($header){
     $retVal = array();
     $fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $header));
     foreach( $fields as $field ) {
@@ -458,8 +537,13 @@ class SchoologyApi
     }
     return $retVal;
   }
-  
-  private function _getApiResponse($curl_resource, $result)
+
+    /**
+     * @param $curl_resource
+     * @param $result
+     * @return object
+     */
+    private function _getApiResponse($curl_resource, $result)
   {
     $response = (object)curl_getinfo( $curl_resource );
     $response->headers = $this->_parseHttpHeaders(mb_substr($result, 0, $response->header_size));
