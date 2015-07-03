@@ -66,7 +66,14 @@ class Saml2Controller extends Controller
         $schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$domain);
         $schoology->authorize($uid,$timestamp);
         $apiResult=$schoology->apiResult('users/'.$uid);
-        dd($apiResult);
+        $user = SchoologyUser::findOrNew($apiResult->uid);
+        $user->id=$apiResult->uid;
+        $user->name=$apiResult->name_display;
+        $user->email=$apiResult->primary_email;
+        $user->username=$apiResult->username;
+        $user->save();
+        Auth::loginUsingId($apiResult->uid);
+        dd(Auth::user());
     }
 
     /**
