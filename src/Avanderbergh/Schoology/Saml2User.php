@@ -7,7 +7,7 @@ use URL;
 /**
  * A simple class that represents the user that 'came' inside the saml2 assertion
  * Class Saml2User
- * @package Aacotroneo\Saml2
+ * @package Avanderbergh\Schoology
  */
 class Saml2User
 {

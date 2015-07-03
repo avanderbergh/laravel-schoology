@@ -27,7 +27,8 @@ class Saml2ServiceProvider extends ServiceProvider
          */
          $this->publishes([
              __DIR__.'/../../config/saml2_settings.php' => config_path('saml2_settings.php'),
-             __DIR__.'/../../migrations/2015_07_01_000000_create_oauth_store_table.php' => database_path('migrations/2015_07_01_000000_create_oauth_store_table.php')
+             __DIR__.'/../../migrations/2015_07_01_000000_create_oauth_store_table.php' => database_path('migrations/2015_07_01_000000_create_oauth_store_table.php'),
+             __DIR__.'/../../migrations/2015_07_03_000000_create_schoology_users_table.php' => database_path('migrations/2015_07_03_000000_create_schoology_users_table.php')
          ]);
     }
 
