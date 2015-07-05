@@ -53,6 +53,7 @@ class Saml2Controller extends Controller
             $schoology_user[$key]=$attribute[0];
         }
         $schoology_user['timestamp']=time();
+        $schoology_user['app_url']=Input::get('RelayState');
         session(['schoology' => $schoology_user]);
         $schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$schoology_user['domain']);
         $redirectUrl = $schoology->authorize($schoology_user['uid'],$schoology_user['timestamp']);
@@ -73,7 +74,8 @@ class Saml2Controller extends Controller
         $user->username=$apiResult->username;
         $user->save();
         Auth::loginUsingId($apiResult->uid);
-        dd(Auth::user());
+        $redirect = session('schoology')['app_url'];
+        return Redirect::to($redirect);
     }
 
     /**
