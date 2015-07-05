@@ -3,9 +3,12 @@
 use App\Http\Controllers\Controller;
 use Avanderbergh\Schoology\Saml2Auth;
 use Avanderbergh\Schoology\SchoologyApi;
+use Avanderbergh\Schoology\SchoologyUser;
 use Mockery\CountValidator\Exception;
 use Request;
 use Redirect;
+use Auth;
+use Input;
 
 class Saml2Controller extends Controller
 {
@@ -44,7 +47,7 @@ class Saml2Controller extends Controller
     {
         $errors = $this->saml2Auth->acs();
         if (!empty($errors)) {
-            throw new Exception('SAMl ACS produced errors!');
+            throw new Exception('SAML ACS produced errors!');
         }
         $user = $this->saml2Auth->getSaml2User();
 
