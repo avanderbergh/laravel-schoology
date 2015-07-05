@@ -64,6 +64,12 @@ class SchoologyApi
     CURLOPT_COOKIESESSION => FALSE,
   );
 
+    private $_uid = null;
+
+    private $_domain = null;
+
+    private $_app_session_timestamp = null;
+
 
     /**
      * @param $consumer_key
@@ -94,6 +100,10 @@ class SchoologyApi
     
     $this->curl_resource = curl_init();
     $this->_is_two_legged = $two_legged;
+
+      $this->_uid = session('schoology')['uid'];
+      $this->_app_session_timestamp = session('schoology')['timestamp'];
+      $this->_domain = session('schoology')['domain'];
   }
 
     /**
@@ -110,7 +120,13 @@ class SchoologyApi
      * @return bool|string
      * @throws Exception
      */
-    public function authorize($uid, $app_session_timestamp){
+    public function authorize($uid=null, $app_session_timestamp=null){
+        if(!$uid){
+            $uid = $this->_uid;
+        }
+        if(!$app_session_timestamp){
+            $app_session_timestamp=$this->_app_session_timestamp;
+        }
     // Get stored access tokens for the given user ID
       $oauthstore=OAuthStore::where('id',$uid)->where('token_is_access',1)->first();
 

@@ -1,6 +1,7 @@
 <?php namespace Avanderbergh\Schoology\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Avanderbergh\Schoology\Facades\Schoology;
 use Avanderbergh\Schoology\Saml2Auth;
 use Avanderbergh\Schoology\SchoologyApi;
 use Avanderbergh\Schoology\SchoologyUser;
@@ -58,8 +59,8 @@ class Saml2Controller extends Controller
         $schoology_user['timestamp']=time();
         $schoology_user['app_url']=Input::get('RelayState');
         session(['schoology' => $schoology_user]);
-        $schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$schoology_user['domain']);
-        $redirectUrl = $schoology->authorize($schoology_user['uid'],$schoology_user['timestamp']);
+        //$schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$schoology_user['domain']);
+        $redirectUrl = Schoology::authorize($schoology_user['uid'],$schoology_user['timestamp']);
         return Redirect::to($redirectUrl);
     }
 
@@ -67,9 +68,9 @@ class Saml2Controller extends Controller
         $uid = session('schoology')['uid'];
         $domain = session('schoology')['domain'];
         $timestamp = session('schoology')['timestamp'];
-        $schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$domain);
-        $schoology->authorize($uid,$timestamp);
-        $apiResult=$schoology->apiResult('users/'.$uid);
+        //$schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$domain);
+        Schoology::authorize($uid,$timestamp);
+        $apiResult=Schoology::apiResult('users/'.$uid);
         $user = SchoologyUser::findOrNew($apiResult->uid);
         $user->id=$apiResult->uid;
         $user->name=$apiResult->name_display;
