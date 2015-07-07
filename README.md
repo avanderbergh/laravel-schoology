@@ -11,16 +11,16 @@ To install this package please add the following to your __composer.json__ in th
 ```
 'providers' => [
     ...
-    'Avanderbergh\Schoology',
-    ...
+    Avanderbergh\Schoology\Saml2ServiceProvider::class,
+    Avanderbergh\Schoology\SchoologyServiceProvider::class,
 ]
 'alias' => [
     ...
-    'Saml2'     =>  'Avanderbergh\Schoology\Facades\Saml2Auth',
+    'Schoology' => Avanderbergh\Schoology\Facades\Schoology::class
 ]
 ```
 Once this has been added, run the command `php artisan vendor:publish` to copy the settings and migrations files to your Laravel `config` and `database/migrations` directories.
-Now run a `php artisan migrate` to create the __oauth_store__ table. This table is used to store oauth access tokens so that users don't need to provide authorization every time they make a request.
+Now run the command `php artisan migrate` to create the __oauth_store__ and __schoology_users__ tables. These tables are used to store oauth access tokens and user information retrieved from Schoology.
 
 ## CSRF Token Verification Middleware
 For this package to work, you will need to disable Laravel's CSRF varification middleware. To do this, open the file `app/Http/Kernel.php`, find the array ```protected $middleware``` and delete the line ```'App\Http\Middleware\VerifyCsrfToken',```.
@@ -43,4 +43,7 @@ CONSUMER_KEY='Your Schoology Oauth Consumer Key'
 CONSUMER_SECRET='You Schoology Oauth Consumer Secret'
 ```
 
-Please refer to <a href="https://developers.schoology.com/api-documentation/rest-api-v1">this page</a> for more information on using the Schoology API.
+Create a route and enter that as your App URL in the Schoology App Center. The user will be routed to this URL once they have been authenticated.
+
+Now, to make API calls to Schoology, simply use the registered Facade for ```php Schoology ```. Use the line ```php Schoology::authorize(); ```` to authorize. You can now make API calls using, for example, ```php` $users = Schoology::apiResult('users'); ```.
+That's it!

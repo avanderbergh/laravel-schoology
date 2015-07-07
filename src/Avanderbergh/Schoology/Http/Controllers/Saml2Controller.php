@@ -1,9 +1,9 @@
-<?php namespace Avanderbergh\Schoology\Http\Controllers;
+<?php
+namespace Avanderbergh\Schoology\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Avanderbergh\Schoology\Facades\Schoology;
 use Avanderbergh\Schoology\Saml2Auth;
-use Avanderbergh\Schoology\SchoologyApi;
 use Avanderbergh\Schoology\SchoologyUser;
 use Mockery\CountValidator\Exception;
 use Request;
@@ -59,17 +59,13 @@ class Saml2Controller extends Controller
         $schoology_user['timestamp']=time();
         $schoology_user['app_url']=Input::get('RelayState');
         session(['schoology' => $schoology_user]);
-        //$schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$schoology_user['domain']);
-        $redirectUrl = Schoology::authorize($schoology_user['uid'],$schoology_user['timestamp']);
+        $redirectUrl = Schoology::authorize();
         return Redirect::to($redirectUrl);
     }
 
     public function authorize(){
         $uid = session('schoology')['uid'];
-        $domain = session('schoology')['domain'];
-        $timestamp = session('schoology')['timestamp'];
-        //$schoology = new SchoologyApi(getenv('CONSUMER_KEY'),getenv('CONSUMER_SECRET'),$domain);
-        Schoology::authorize($uid,$timestamp);
+        Schoology::authorize();
         $apiResult=Schoology::apiResult('users/'.$uid);
         $user = SchoologyUser::findOrNew($apiResult->uid);
         $user->id=$apiResult->uid;
