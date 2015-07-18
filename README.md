@@ -14,7 +14,7 @@ To install this package please add the following to your __composer.json__ in th
     Avanderbergh\Schoology\Saml2ServiceProvider::class,
     Avanderbergh\Schoology\SchoologyServiceProvider::class,
 ]
-'alias' => [
+'aliases' => [
     ...
     'Schoology' => Avanderbergh\Schoology\Facades\Schoology::class
 ]
