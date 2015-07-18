@@ -22,6 +22,15 @@ To install this package please add the following to your __composer.json__ in th
 Once this has been added, run the command `php artisan vendor:publish` to copy the settings and migrations files to your Laravel `config` and `database/migrations` directories.
 Now run the command `php artisan migrate` to create the __oauth_store__ and __schoology_users__ tables. These tables are used to store oauth access tokens and user information retrieved from Schoology.
 
+Once the tables have been created, you will need to edit the __config/auth.php__ file. Edit the ```model```and ```table``` keys to read:
+```php
+return [
+...
+    'model' => Avanderbergh\Schoology\SchoologyUser::class,
+...
+    'table' => 'schoology_users',
+];
+```
 ## CSRF Token Verification Middleware
 For this package to work, you will need to disable Laravel's CSRF varification middleware. To do this, open the file `app/Http/Kernel.php`, find the array ```protected $middleware``` and delete the line ```'App\Http\Middleware\VerifyCsrfToken',```.
 The file should now look like this:
