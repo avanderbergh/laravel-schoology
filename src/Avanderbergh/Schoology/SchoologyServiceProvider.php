@@ -8,7 +8,10 @@ class SchoologyServiceProvider extends ServiceProvider
 
     public function boot()
     {
-
+        $this->publishes([
+            __DIR__.'/../../migrations/2015_07_01_000000_create_oauth_store_table.php' => database_path('migrations/2015_07_01_000000_create_oauth_store_table.php'),
+            __DIR__.'/../../migrations/2015_07_03_000000_create_schoology_users_table.php' => database_path('migrations/2015_07_03_000000_create_schoology_users_table.php')
+        ]);
     }
 
     public function register()
