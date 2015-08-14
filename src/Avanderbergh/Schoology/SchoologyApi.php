@@ -392,6 +392,7 @@ class SchoologyApi
       $params = array(
               'return_url=' . urlencode('https://'.$_SERVER['SERVER_NAME'] . '/saml/authorize'),
               'oauth_token=' . urlencode($result['oauth_token']),
+          
       );
 
         $query_string = implode('&', $params);
