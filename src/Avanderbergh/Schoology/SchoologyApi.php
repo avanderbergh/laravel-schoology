@@ -390,7 +390,7 @@ class SchoologyApi
 
       // Now that we have a request token, forward the user to approve it
       $params = array(
-              'return_url=' . urlencode($_SERVER['SERVER_NAME'] . '/saml/authorize'),
+              'return_url=' . urlencode('https://'.$_SERVER['SERVER_NAME'] . '/saml/authorize'),
               'oauth_token=' . urlencode($result['oauth_token']),
       );
 
