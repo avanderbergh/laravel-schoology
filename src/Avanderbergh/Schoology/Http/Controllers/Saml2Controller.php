@@ -63,6 +63,11 @@ class Saml2Controller extends Controller
         return Redirect::to($redirectUrl);
     }
 
+    /**
+     * @param null $ability
+     * @param array $arguments
+     * @return mixed
+     */
     public function authorize($ability=null, $arguments = Array()){
         $uid = session('schoology')['uid'];
         Schoology::authorize();
