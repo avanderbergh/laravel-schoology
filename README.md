@@ -32,16 +32,22 @@ return [
 ];
 ```
 ## CSRF Token Verification Middleware
-For this package to work, you will need to disable Laravel's CSRF varification middleware. To do this, open the file `app/Http/Kernel.php`, find the array ```protected $middleware``` and delete the line ```'App\Http\Middleware\VerifyCsrfToken',```.
-The file should now look like this:
+For this package to work, you will need to exclude the 'saml/*' route from Laravel's CSRF verification middleware. Open `app/Http/Middleware/VerifyCsrfToken.php`, and enter 'saml/*' into the ```$except``` array.
+
+###The file should now look like this:
+
 ```php
-protected $middleware = [
-		'Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode',
-		'Illuminate\Cookie\Middleware\EncryptCookies',
-		'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
-		'Illuminate\Session\Middleware\StartSession',
-		'Illuminate\View\Middleware\ShareErrorsFromSession',
-];
+class VerifyCsrfToken extends BaseVerifier
+{
+    /**
+     * The URIs that should be excluded from CSRF verification.
+     *
+     * @var array
+     */
+    protected $except = [
+        'saml/*'
+    ];
+}
 ```
 # Usage
 Set your application's **SAML ACS URL** to `[yourdomain]/saml/acs` in Schoology.
