@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class OAuthStore extends Model {
 
 	protected $fillable = [
-        'uid',
+        'id',
         'token_key',
         'token_secret',
         'token_is_access'
