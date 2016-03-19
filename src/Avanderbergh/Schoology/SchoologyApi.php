@@ -392,13 +392,8 @@ class SchoologyApi
       $storage->save();
 
       // Now that we have a request token, forward the user to approve it
-      // Check if the user is using HTTPS or not and set the return_url accordingly
-      if(isset($_SERVER['HTTPS'])){
-        $return_url=urlencode('https://'.$_SERVER['SERVER_NAME'] . '/saml/authorize');
-      } else{
-        $return_url=urlencode('http://'.$_SERVER['SERVER_NAME'] . '/saml/authorize');
-      }
-
+      // Since Schoology does not allow apps to be embedded over HTTP, all links will be returned as Https
+      $return_url=urlencode('https://'.$_SERVER['SERVER_NAME'] . '/saml/authorize');
       $params = array(
           'return_url=' . $return_url,
           'oauth_token=' . urlencode($result['oauth_token']),
@@ -406,12 +401,8 @@ class SchoologyApi
 
       $query_string = implode('&', $params);
 
-      // Check if the site is using https or not and return the appropriate endpoint
-      if(isset($_SERVER['HTTPS'])){
-        return 'https://'.$this->_api_site_base.'/oauth/authorize?'.$query_string;
-      } else{
-        return 'http://'.$this->_api_site_base.'/oauth/authorize?'.$query_string;
-      }
+      // Only works with https
+      return 'https://'.$this->_api_site_base.'/oauth/authorize?'.$query_string;
     }
     // The user has approved the token and returned to this page
     else {
