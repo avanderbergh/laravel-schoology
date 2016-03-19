@@ -60,7 +60,7 @@ class Saml2Controller extends Controller
         $schoology_user['app_url']=Input::get('RelayState');
         session(['schoology' => $schoology_user]);
         $redirectUrl = Schoology::authorize();
-        return Redirect::to($redirectUrl);
+        return Redirect::secure($redirectUrl);
     }
 
     /**
@@ -80,7 +80,7 @@ class Saml2Controller extends Controller
         $user->save();
         Auth::loginUsingId($apiResult->uid);
         $redirect = session('schoology')['app_url'];
-        return Redirect::to($redirect);
+        return Redirect::secure($redirect);
     }
 
     /**
@@ -94,7 +94,7 @@ class Saml2Controller extends Controller
         if (!empty($error)) {
             throw new \Exception("Could not log out");
         }
-        return Redirect::to('/');
+        return Redirect::secure('/');
     }
 
     /**
