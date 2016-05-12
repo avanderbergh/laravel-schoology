@@ -236,8 +236,23 @@ class SchoologyApi
 
     // add the oauth headers
     $extra_headers[] = 'Authorization: '.$this->_makeOauthHeaders( $api_url , $method , $body );
-
-    $response = $this->_curlRequest( $api_url , $method , $body , $extra_headers );
+    $tries = 0;
+    do
+    {
+	    $success = true;
+	    $response = $this->_curlRequest( $api_url , $method , $body , $extra_headers );
+	    if($response->http_code == 429)
+	    {
+		    // The API limit was exceeded. The request needs to be retried.
+		    $success = false;
+		    time_nanosleep(2.27^$tries,rand(0,1000000000));
+		    $tries++;
+		    if ($tries > 5)
+		    {
+			    throw new Exception("API Request Limit Tries Exceeded");
+		    }
+	    }
+    } while(!$success);
 
     // Something's gone wrong
     if($response->http_code > 400){
