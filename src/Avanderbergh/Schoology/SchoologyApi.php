@@ -1,7 +1,7 @@
 <?php
 namespace Avanderbergh\Schoology;
 
-use Mockery\CountValidator\Exception;
+use Exception;
 use Redirect;
 
 /**
