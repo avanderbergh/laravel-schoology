@@ -408,7 +408,7 @@ class SchoologyApi
 
       // Now that we have a request token, forward the user to approve it
       // Since Schoology does not allow apps to be embedded over HTTP, all links will be returned as Https
-      $return_url=urlencode('https://'.$_SERVER['SERVER_NAME'] . '/saml/authorize');
+      $return_url=url('saml/authorize', null, True);
       $params = array(
           'return_url=' . $return_url,
           'oauth_token=' . urlencode($result['oauth_token']),
