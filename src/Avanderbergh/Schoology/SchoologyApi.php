@@ -461,7 +461,7 @@ class SchoologyApi
   {
     $timestamp = time();
 
-    $nonce = uniqid();
+    $nonce = uniqid(gethostname(), TRUE);
 
     $oauth_config = array(
         'oauth_consumer_key' => $this->_consumer_key,
