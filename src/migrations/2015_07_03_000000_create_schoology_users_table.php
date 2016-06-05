@@ -1,18 +1,16 @@
 <?php
+
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSchoologyUsersTable extends Migration {
-
+class CreateSchoologyUsersTable extends Migration
+{
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
-        Schema::create('schoology_users', function(Blueprint $table)
-        {
+        Schema::create('schoology_users', function (Blueprint $table) {
             $table->unsignedInteger('id')->primary()->unique();
             $table->string('username')->nullable();
             $table->string('email')->nullable();
@@ -23,12 +21,9 @@ class CreateSchoologyUsersTable extends Migration {
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         Schema::drop('schoology_users');
     }
-
 }

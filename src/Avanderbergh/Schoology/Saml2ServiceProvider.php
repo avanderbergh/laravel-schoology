@@ -1,4 +1,6 @@
-<?php namespace Avanderbergh\Schoology;
+<?php
+
+namespace Avanderbergh\Schoology;
 
 use OneLogin_Saml2_Auth;
 use URL;
@@ -6,7 +8,6 @@ use Illuminate\Support\ServiceProvider;
 
 class Saml2ServiceProvider extends ServiceProvider
 {
-
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -16,24 +17,20 @@ class Saml2ServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap the application events.
-     *
-     * @return void
      */
     public function boot()
     {
-        include __DIR__ . '/../../routes.php';
+        include __DIR__.'/../../routes.php';
         /*
          * publish the saml_settings file to the config_path
          */
-         $this->publishes([
-             __DIR__.'/../../config/saml2_settings.php' => config_path('saml2_settings.php'),
-         ]);
+        $this->publishes([
+            __DIR__.'/../../config/saml2_settings.php' => config_path('saml2_settings.php'),
+        ]);
     }
 
     /**
      * Register the service provider.
-     *
-     * @return void
      */
     public function register()
     {
@@ -43,6 +40,7 @@ class Saml2ServiceProvider extends ServiceProvider
             $config['sp']['assertionConsumerService']['url'] = URL::route('saml_acs');
             $config['sp']['singleLogoutService']['url'] = URL::route('saml_sls');
             $auth = new OneLogin_Saml2_Auth($config);
+
             return new Saml2Auth($auth);
         });
     }
@@ -56,5 +54,4 @@ class Saml2ServiceProvider extends ServiceProvider
     {
         return array();
     }
-
 }

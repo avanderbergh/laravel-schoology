@@ -1,4 +1,5 @@
 <?php
+
 namespace Avanderbergh\Schoology\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -13,25 +14,23 @@ use Input;
 
 class Saml2Controller extends Controller
 {
-
     protected $saml2Auth;
 
     /**
      * @param Saml2Auth $saml2Auth injected.
      */
-    function __construct(Saml2Auth $saml2Auth)
+    public function __construct(Saml2Auth $saml2Auth)
     {
         $this->saml2Auth = $saml2Auth;
     }
 
-
     /**
-     * Generate local sp metadata
+     * Generate local sp metadata.
+     *
      * @return \Illuminate\Http\Response
      */
     public function metadata()
     {
-
         $metadata = $this->saml2Auth->getMetadata();
         $response = Response::make($metadata, 200);
 
@@ -42,7 +41,7 @@ class Saml2Controller extends Controller
 
     /**
      * Process an incoming saml2 assertion request.
-     * Fires 'saml2.loginRequestReceived' event if a valid user is Found
+     * Fires 'saml2.loginRequestReceived' event if a valid user is Found.
      */
     public function acs()
     {
@@ -53,33 +52,37 @@ class Saml2Controller extends Controller
         $user = $this->saml2Auth->getSaml2User();
 
         $userAttributes = $user->getAttributes();
-        foreach($userAttributes as $key => $attribute){
-            $schoology_user[$key]=$attribute[0];
+        foreach ($userAttributes as $key => $attribute) {
+            $schoology_user[$key] = $attribute[0];
         }
-        $schoology_user['timestamp']=time();
-        $schoology_user['app_url']=Input::get('RelayState');
+        $schoology_user['timestamp'] = time();
+        $schoology_user['app_url'] = Input::get('RelayState');
         session(['schoology' => $schoology_user]);
         $redirectUrl = Schoology::authorize();
+
         return Redirect::secure($redirectUrl);
     }
 
     /**
-     * @param null $ability
+     * @param null  $ability
      * @param array $arguments
+     *
      * @return mixed
      */
-    public function authorize($ability=null, $arguments = Array()){
+    public function authorize($ability = null, $arguments = array())
+    {
         $uid = session('schoology')['uid'];
         Schoology::authorize();
-        $apiResult=Schoology::apiResult('users/'.$uid);
+        $apiResult = Schoology::apiResult('users/'.$uid);
         $user = SchoologyUser::findOrNew($apiResult->uid);
-        $user->id=$apiResult->uid;
-        $user->name=$apiResult->name_display;
-        $user->email=$apiResult->primary_email;
-        $user->username=$apiResult->username;
+        $user->id = $apiResult->uid;
+        $user->name = $apiResult->name_display;
+        $user->email = $apiResult->primary_email;
+        $user->username = $apiResult->username;
         $user->save();
         Auth::loginUsingId($apiResult->uid);
         $redirect = session('schoology')['app_url'];
+
         return Redirect::secure($redirect);
     }
 
@@ -92,8 +95,9 @@ class Saml2Controller extends Controller
     {
         $error = $this->saml2Auth->sls();
         if (!empty($error)) {
-            throw new \Exception("Could not log out");
+            throw new \Exception('Could not log out');
         }
+
         return Redirect::secure('/');
     }
 
@@ -106,13 +110,11 @@ class Saml2Controller extends Controller
         //does not return
     }
 
-
     /**
-     * This initiates a login request
+     * This initiates a login request.
      */
     public function login()
     {
         $this->saml2Auth->login();
     }
-
 }

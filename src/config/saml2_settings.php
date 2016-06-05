@@ -9,39 +9,32 @@ return $settings = array(
      **/
     'useRoutes' => true, //include library routes and controllers
 
-
     'routesPrefix' => '/saml2',
 
-    /**
+    /*
      * Where to redirect after logout
      */
     'logoutRoute' => '/',
 
-    /**
+    /*
      * Where to redirect after login if no other option was provided
      */
     'loginRoute' => 'application',
 
-
-    /**
+    /*
      * Where to redirect after login if no other option was provided
      */
     'errorRoute' => 'error',
-
-
-
 
     /*****
      * One Loign Settings
      */
 
-
-
     // If 'strict' is True, then the PHP Toolkit will reject unsigned
     // or unencrypted messages if it expects them signed or encrypted
     // Also will reject the messages if not strictly follow the SAML
     // standard: Destination, NameId, Conditions ... are validated too.
-    'strict' => false   , //@todo: make this depend on laravel config
+    'strict' => false, //@todo: make this depend on laravel config
 
     // Enable debug mode (to print errors)
     'debug' => true, //@todo: make this depend on laravel config
@@ -87,11 +80,11 @@ return $settings = array(
     // Identity Provider Data that we want connect with our SP
     'idp' => array(
         // Identifier of the IdP entity  (must be a URI)
-        'entityId' => $idp_host . '/saml2/idp/metadata.php',
+        'entityId' => $idp_host.'/saml2/idp/metadata.php',
         // SSO endpoint info of the IdP. (Authentication Request protocol)
         'singleSignOnService' => array(
             // URL Target of the IdP where the SP will send the Authentication Request Message
-            'url' => $idp_host . '/saml2/idp/SSOService.php',
+            'url' => $idp_host.'/saml2/idp/SSOService.php',
             // SAML protocol binding to be used when returning the <Response>
             // message.  Onelogin Toolkit supports for this endpoint the
             // HTTP-POST binding only
@@ -100,7 +93,7 @@ return $settings = array(
         // SLO endpoint info of the IdP.
         'singleLogoutService' => array(
             // URL Location of the IdP where the SP will send the SLO Request
-            'url' => $idp_host . '/saml2/idp/SingleLogoutService.php',
+            'url' => $idp_host.'/saml2/idp/SingleLogoutService.php',
             // SAML protocol binding to be used when returning the <Response>
             // message.  Onelogin Toolkit supports for this endpoint the
             // HTTP-Redirect binding only
@@ -115,8 +108,6 @@ return $settings = array(
         // 'certFingerprint' => '',
     ),
 
-
-
     /***
      *
      *  OneLogin advanced settings
@@ -126,7 +117,7 @@ return $settings = array(
     // Security settings
     'security' => array(
 
-        /** signatures and encryptions offered */
+        /* signatures and encryptions offered */
 
         // Indicates that the nameID of the <samlp:logoutRequest> sent by this SP
         // will be encrypted.
@@ -149,11 +140,10 @@ return $settings = array(
                                                     keyFileName => 'metadata.key',
                                                     certFileName => 'metadata.crt'
                                                 )
-        */
+         */
         'signMetadata' => false,
 
-
-        /** signatures and encryptions required **/
+        /* signatures and encryptions required **/
 
         // Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest> and
         // <samlp:LogoutResponse> elements received by this SP to be signed.
@@ -178,11 +168,11 @@ return $settings = array(
     'contactPerson' => array(
         'technical' => array(
             'givenName' => 'name',
-            'emailAddress' => 'no@reply.com'
+            'emailAddress' => 'no@reply.com',
         ),
         'support' => array(
             'givenName' => 'Support',
-            'emailAddress' => 'no@reply.com'
+            'emailAddress' => 'no@reply.com',
         ),
     ),
 
@@ -191,7 +181,7 @@ return $settings = array(
         'en-US' => array(
             'name' => 'Name',
             'displayname' => 'Display Name',
-            'url' => 'http://url'
+            'url' => 'http://url',
         ),
     ),
 
@@ -202,6 +192,6 @@ return $settings = array(
    'wantAssertionsSigned' => true,
    'wantAssertionsEncrypted' => true, // MUST be enabled if SSL/HTTPs is disabled
    'wantNameIdEncrypted' => false,
-*/
+ */
 
 );

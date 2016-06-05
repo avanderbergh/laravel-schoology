@@ -1,4 +1,6 @@
-<?php namespace Avanderbergh\Schoology;
+<?php
+
+namespace Avanderbergh\Schoology;
 
 use Input;
 use OneLogin_Saml2_Auth;
@@ -6,15 +8,13 @@ use URL;
 
 /**
  * A simple class that represents the user that 'came' inside the saml2 assertion
- * Class Saml2User
- * @package Avanderbergh\Schoology
+ * Class Saml2User.
  */
 class Saml2User
 {
-
     protected $auth;
 
-    function __construct(OneLogin_Saml2_Auth $auth)
+    public function __construct(OneLogin_Saml2_Auth $auth)
     {
         $this->auth = $auth;
     }
@@ -22,18 +22,17 @@ class Saml2User
     /**
      * @return string User Id retrieved from assertion processed this request
      */
-    function getUserId()
+    public function getUserId()
     {
         $auth = $this->auth;
 
         return $auth->getNameId();
-
     }
 
     /**
      * @return array attributes retrieved from assertion processed this request
      */
-    function getAttributes()
+    public function getAttributes()
     {
         $auth = $this->auth;
 
@@ -43,19 +42,17 @@ class Saml2User
     /**
      * @return string the saml assertion processed this request
      */
-    function getRawSamlAssertion()
+    public function getRawSamlAssertion()
     {
         return Input::get('SAMLResponse'); //just this request
     }
 
-    function getIntendedUrl()
+    public function getIntendedUrl()
     {
         $relayState = Input::get('RelayState'); //just this request
 
-        if ($relayState && URL::full() !=$relayState) {
-
+        if ($relayState && URL::full() != $relayState) {
             return $relayState;
         }
     }
-
-} 
+}
