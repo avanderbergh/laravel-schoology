@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'saml'], function () {
+Route::group(['prefix' => 'saml', 'middleware' => 'web'], function () {
 
     Route::post('/acs', [
         'as' => 'saml_acs',
