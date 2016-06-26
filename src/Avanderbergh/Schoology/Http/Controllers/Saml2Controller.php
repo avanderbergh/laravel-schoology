@@ -56,7 +56,7 @@ class Saml2Controller extends Controller
             $schoology_user[$key] = $attribute[0];
         }
         $schoology_user['timestamp'] = time();
-        $schoology_user['app_url'] = Input::get('RelayState');
+        $schoology_user['app_url'] = Request::get('RelayState');
         session(['schoology' => $schoology_user]);
         $redirectUrl = Schoology::authorize();
 
