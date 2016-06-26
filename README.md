@@ -3,12 +3,10 @@ A Laravel 5 package that provides an easy way to create <a href="https://develop
 This package combines modified files from <a href="https://github.com/aacotroneo/laravel-saml2">aacotroneo/laravel-saml2</a> and <a href="https://github.com/schoology/schoology_php_sdk">schoology/schoology_php_sdk</a> into a new package.
 
 # Installation with Composer
-To install this package please add the following to your __composer.json__ in the Laravel root directory...
-```json
-"avanderbergh/laravel-schoology" : "*"
-```
-... and run `composer update`. When the installation finishes, add add the following to `app/config/app.php`.
-```
+Run the following command in your app's root directory ```composer require avanderbergh/laravel-schoology```.
+
+When the installation finishes, add add the following to `config/app.php`.
+```php
 'providers' => [
     ...
     Avanderbergh\Schoology\Saml2ServiceProvider::class,
@@ -16,20 +14,26 @@ To install this package please add the following to your __composer.json__ in th
 ]
 'aliases' => [
     ...
-    'Schoology' => Avanderbergh\Schoology\Facades\Schoology::class
+    'Schoology' => Avanderbergh\Schoology\Facades\Schoology::class,
 ]
 ```
+
 Once this has been added, run the command `php artisan vendor:publish` to copy the settings and migrations files to your Laravel `config` and `database/migrations` directories.
 Now run the command `php artisan migrate` to create the __oauth_store__ and __schoology_users__ tables. These tables are used to store oauth access tokens and user information retrieved from Schoology.
 
-Once the tables have been created, you will need to edit the __config/auth.php__ file. Edit the ```model```and ```table``` keys to read:
+Once the tables have been created, you will need to edit the __config/auth.php__ file.
+In the User Providers section, change the `model` key for the `users` provider to ```Avanderbergh\Schoology\SchoologyUser::class,```
+The file should now look like this:
 ```php
-return [
 ...
-    'model' => Avanderbergh\Schoology\SchoologyUser::class,
+    ...
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => Avanderbergh\Schoology\SchoologyUser::class,
+        ],
+    ...
 ...
-    'table' => 'schoology_users',
-];
 ```
 ## CSRF Token Verification Middleware
 For this package to work, you will need to exclude the 'saml/*' route from Laravel's CSRF verification middleware. Open `app/Http/Middleware/VerifyCsrfToken.php`, and enter 'saml/*' into the ```$except``` array.
