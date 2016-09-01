@@ -262,7 +262,7 @@ class SchoologyApi
 
         // Something's gone wrong
         if ($response->http_code > 400) {
-            throw new Exception($response->raw_result, $response->http_code);
+            throw new Exception($response->http_code.": ".$response->raw_result);
         }
 
         return $response;
@@ -475,7 +475,7 @@ class SchoologyApi
     {
         $timestamp = time();
 
-        $nonce = uniqid(gethostname(), true);
+        $nonce = uniqid(gethostname()."_", true).bin2hex(openssl_random_pseudo_bytes(10));
 
         $oauth_config = array(
             'oauth_consumer_key' => $this->_consumer_key,
