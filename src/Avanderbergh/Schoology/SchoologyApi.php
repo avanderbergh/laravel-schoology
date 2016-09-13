@@ -412,6 +412,10 @@ class SchoologyApi
             // Parse the query-string-formatted result
             $result = array();
             parse_str($api_result->result, $result);
+            // Check if we received a valid response from the API
+            if (!isset($result['oauth_token']) || !isset($result['oauth_token_secret'])){
+                throw new Exception('Invalid oauth response from API: '.$api_result->result);
+            }
             // Store the request token in our DB
             $storage = OAuthStore::firstOrNew(['id' => $uid]);
             $storage->id = $uid;
