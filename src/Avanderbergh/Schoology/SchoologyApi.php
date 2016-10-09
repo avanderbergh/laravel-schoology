@@ -250,22 +250,19 @@ class SchoologyApi
             $success = true;
             $extra_headers[] = 'Authorization: '.$this->_makeOauthHeaders($api_url, $method, $body);
             $response = $this->_curlRequest($api_url, $method, $body, $extra_headers);
-            if ($response->http_code > 400) {
+            if ($response->http_code == 403) {
+                throw new Exception('The user does not have access to the requested resource.');
+            } else if ($response->http_code >= 400) {
                 // Something went wrong, retry.
                 $success = false;
                 $extra_headers = $original_headers;
                 time_nanosleep(2.27 ^ $tries, rand(0, 1000000000));
                 ++$tries;
                 if ($tries > 5) {
-                    throw new Exception('5 retries exceeded, http code: '.$response->http_code);
+                    throw new Exception('5 retries exceeded. '.$response->http_code.': '.$response->raw_result);
                 }
             }
         } while (!$success);
-
-        // Something's gone wrong
-        if ($response->http_code > 400) {
-            throw new Exception($response->http_code.": ".$response->raw_result);
-        }
 
         return $response;
     }
